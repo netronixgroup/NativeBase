@@ -71,17 +71,17 @@ class PickerNB extends Component {
 
   getLabel(props) {
     let children = this.getChildren(props.children);
-    const item = _.find(
-      children,
-      child => child.props.value === props.selectedValue
-    );
-    return _.get(item, "props.label");
+    const items = children
+      .filter(child => this.getIsSelectedValue(props, child.props.value))
+      .map(item => _.get(item, "props.label"))
+    if (!this.isMultiple(props)) return items[0];
+    return items;
   }
 
   getSelectedItem() {
     return _.find(
       this.props.children,
-      child => child.props.value === this.props.selectedValue
+      child => this.getIsSelectedValue(this.props, child.props.value)
     );
   }
 
@@ -131,7 +131,7 @@ class PickerNB extends Component {
       >
         {this.state.currentLabel ? (
           <Text style={this.props.textStyle} note={this.props.note}>
-            {this.state.currentLabel}
+            {this.isMultiple(this.props) ? this.state.currentLabel.join(', ') : this.state.currentLabel}
           </Text>
         ) : (
             <Text
@@ -181,6 +181,17 @@ class PickerNB extends Component {
       );
   }
 
+  isMultiple(props) {
+    return props.multiple && Array.isArray(props.selectedValue)
+  }
+
+  getIsSelectedValue(props, value) {
+    if (this.isMultiple(props)) {
+      return _.includes(props.selectedValue, value);
+    }
+    return value === props.selectedValue;
+  }
+
   render() {
     return (
       <View ref={c => (this._root = c)}>
@@ -202,7 +213,7 @@ class PickerNB extends Component {
               keyExtractor={(item, index) => String(index)}
               renderItem={({ item }) => (
                 <ListItem
-                  selected={item.props.value === this.props.selectedValue}
+                  selected={this.getIsSelectedValue(this.props, item.props.value)}
                   button
                   style={this.props.itemStyle}
                   onPress={() => {
@@ -217,7 +228,7 @@ class PickerNB extends Component {
                     </Text>
                   </Left>
                   <Right>
-                    {item.props.value === this.props.selectedValue ? (
+                    {this.getIsSelectedValue(this.props, item.props.value) ? (
                       <Radio selected />
                     ) : (
                         <Radio selected={false} />
