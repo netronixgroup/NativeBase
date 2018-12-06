@@ -211,24 +211,32 @@ class PickerNB extends Component {
             <FlatList
               data={this.state.dataSource}
               keyExtractor={(item, index) => String(index)}
-              renderItem={({ item }) => (
+              renderItem={({ item: { props: { value, label } } }) => (
                 <ListItem
-                  selected={this.getIsSelectedValue(this.props, item.props.value)}
+                  selected={this.getIsSelectedValue(this.props, value)}
                   button
                   style={this.props.itemStyle}
                   onPress={() => {
-                    this._setModalVisible(false);
-                    this.props.onValueChange(item.props.value);
-                    this.setState({ current: item.props.label });
+                    if (this.isMultiple(this.props)) {
+                      if (this.getIsSelectedValue(this.props, value)) {
+                        this.props.onValueChange(_.pull(this.props.selectedValue, value))
+                      } else {
+                        this.props.onValueChange(_.uniq([...this.props.selectedValue, value]))
+                      }
+                    } else {
+                      this._setModalVisible(false);
+                      this.props.onValueChange(value);
+                      this.setState({ current: label });
+                    }
                   }}
                 >
                   <Left>
                     <Text style={this.props.itemTextStyle}>
-                      {item.props.label}
+                      {label}
                     </Text>
                   </Left>
                   <Right>
-                    {this.getIsSelectedValue(this.props, item.props.value) ? (
+                    {this.getIsSelectedValue(this.props, value) ? (
                       <Radio selected />
                     ) : (
                         <Radio selected={false} />
