@@ -131,7 +131,9 @@ class PickerNB extends Component {
       >
         {this.state.currentLabel ? (
           <Text style={this.props.textStyle} note={this.props.note}>
-            {this.isMultiple(this.props) ? this.state.currentLabel.join(', ') : this.state.currentLabel}
+            {this.isMultiple(this.props) ? (
+              this.state.currentLabel.length > 1 ? `${this.state.currentLabel[0]}...` : this.state.currentLabel
+            ) : this.state.currentLabel}
           </Text>
         ) : (
             <Text
@@ -219,7 +221,7 @@ class PickerNB extends Component {
                   onPress={() => {
                     if (this.isMultiple(this.props)) {
                       if (this.getIsSelectedValue(this.props, value)) {
-                        this.props.onValueChange(_.pull(this.props.selectedValue, value))
+                        this.props.onValueChange(_.without(this.props.selectedValue, value))
                       } else {
                         this.props.onValueChange(_.uniq([...this.props.selectedValue, value]))
                       }
