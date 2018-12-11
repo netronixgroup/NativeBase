@@ -259,9 +259,9 @@ class PickerNB extends Component {
                   </Left>
                   <Right>
                     {this.getIsSelectedValue(this.props, value) ? (
-                      <Radio selected />
+                      <Radio selected selectedColor={this.props.itemSelectedIconColor}  />
                     ) : (
-                        <Radio selected={false} />
+                        <Radio selected={false} color={this.props.itemSelectedIconColor} />
                       )}
                   </Right>
                 </ListItem>
