@@ -75,7 +75,7 @@ class PickerNB extends Component {
       .filter(child => this.getIsSelectedValue(props, child.props.value))
       .map(item => _.get(item, "props.label"))
     if (!this.isMultiple(props)) return items[0];
-    return items;
+    return items.length ? items : null;
   }
 
   getSelectedItem() {
@@ -130,13 +130,14 @@ class PickerNB extends Component {
         onPress={onPress}
       >
         {this.state.currentLabel ? (
-          <Text style={this.props.textStyle} note={this.props.note}>
+          <Text style={this.props.textStyle} note={this.props.note} uppercase={false}>
             {this.isMultiple(this.props) ? (
-              this.state.currentLabel.length > 1 ? `${this.state.currentLabel[0]}...` : this.state.currentLabel
+              this.state.currentLabel.length > 1 ? `${this.state.currentLabel[0]}...` : this.state.currentLabel[0]
             ) : this.state.currentLabel}
           </Text>
         ) : (
             <Text
+              uppercase={false}
               style={[this.props.textStyle, this.props.placeholderStyle]}
               note={this.props.note === false ? false : true}
             >
@@ -169,7 +170,7 @@ class PickerNB extends Component {
               }}
             >
               <Text style={this.props.headerBackButtonTextStyle}>
-                {this.props.headerBackButtonText || "Back"}
+                {this.props.iosHeaderBackIcon || "Back"}
               </Text>
             </Button>
           </Left>
@@ -178,7 +179,26 @@ class PickerNB extends Component {
               {this.props.iosHeader || "Select One"}
             </Title>
           </Body>
-          <Right />
+          <Right>
+            {this.isMultiple(this.props) ? (<Button
+                style={{
+                  shadowOffset: null,
+                  shadowColor: null,
+                  shadowRadius: null,
+                  shadowOpacity: null,
+                  marginLeft: 3,
+                  ...this.props.headerBackButtonStyle
+                }}
+                transparent
+                onPress={() => {
+                  this._setModalVisible(false);
+                }}
+              >
+                <Text style={this.props.headerBackButtonTextStyle} uppercase={false}>
+                  {this.props.headerApplyButtonText || "Done"}
+                </Text>
+              </Button>) : null}
+          </Right>
         </Header>
       );
   }
