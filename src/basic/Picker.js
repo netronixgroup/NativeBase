@@ -121,6 +121,9 @@ class PickerNB extends Component {
         selectedItem: this.getSelectedItem()
       });
     }
+    const currentLabel = this.isMultiple(this.props) ? (
+      this.state.currentLabel.length > 1 ? `${this.state.currentLabel[0]}...` : this.state.currentLabel[0]
+    ) : this.state.currentLabel;
     return (
       <Button
         style={this.props.style}
@@ -129,15 +132,15 @@ class PickerNB extends Component {
         transparent
         onPress={onPress}
       >
-        {this.state.currentLabel ? (
-          <Text style={this.props.textStyle} note={this.props.note} uppercase={false}>
-            {this.isMultiple(this.props) ? (
-              this.state.currentLabel.length > 1 ? `${this.state.currentLabel[0]}...` : this.state.currentLabel[0]
-            ) : this.state.currentLabel}
-          </Text>
-        ) : (
+        {this.state.currentLabel
+          ? this.props.renderItemLabel
+            ? this.props.renderItemLabel({ value: this.props.selectedValue, label: currentLabel })
+            : (
+            <Text style={this.props.textStyle} note={this.props.note}>
+              {currentLabel}
+            </Text>)
+          : (
             <Text
-              uppercase={false}
               style={[this.props.textStyle, this.props.placeholderStyle]}
               note={this.props.note === false ? false : true}
             >
@@ -194,7 +197,7 @@ class PickerNB extends Component {
                   this._setModalVisible(false);
                 }}
               >
-                <Text style={this.props.headerBackButtonTextStyle} uppercase={false}>
+                <Text style={this.props.headerBackButtonTextStyle}>
                   {this.props.headerApplyButtonText || "Done"}
                 </Text>
               </Button>) : null}
@@ -253,9 +256,13 @@ class PickerNB extends Component {
                   }}
                 >
                   <Left>
-                    <Text style={this.props.itemTextStyle}>
-                      {label}
-                    </Text>
+                    {this.props.renderItemLabel
+                      ? this.props.renderItemLabel({ value, label })
+                      : (
+                      <Text style={this.props.itemTextStyle}>
+                        {label}
+                      </Text>
+                    )}
                   </Left>
                   <Right>
                     {this.getIsSelectedValue(this.props, value) ? (
