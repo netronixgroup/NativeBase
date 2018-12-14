@@ -121,9 +121,11 @@ class PickerNB extends Component {
         selectedItem: this.getSelectedItem()
       });
     }
-    const currentLabel = this.isMultiple(this.props) ? (
-      this.state.currentLabel.length > 1 ? `${this.state.currentLabel[0]}...` : this.state.currentLabel[0]
-    ) : this.state.currentLabel;
+    const currentLabel = this.state.currentLabel && this.isMultiple(this.props)
+      ? this.state.currentLabel.length > 1
+        ? `${this.state.currentLabel[0]}...`
+        : this.state.currentLabel[0]
+      : this.state.currentLabel;
     return (
       <Button
         style={this.props.style}
