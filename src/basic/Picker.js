@@ -159,7 +159,7 @@ class PickerNB extends Component {
       this.props.renderHeader(() => this._setModalVisible(false))
     ) : (
         <Header style={this.props.headerStyle}>
-          <Left>
+          <Left style={this.props.headerLeftContainerStyle}>
             <Button
               style={{
                 shadowOffset: null,
@@ -179,12 +179,12 @@ class PickerNB extends Component {
               </Text>
             </Button>
           </Left>
-          <Body>
+          <Body style={this.props.headerBodyContainerStyle}>
             <Title style={this.props.headerTitleStyle}>
               {this.props.iosHeader || "Select One"}
             </Title>
           </Body>
-          <Right>
+          <Right style={this.props.headerRightContainerStyle}>
             {this.isMultiple(this.props) ? (<Button
                 style={{
                   shadowOffset: null,
@@ -199,8 +199,8 @@ class PickerNB extends Component {
                   this._setModalVisible(false);
                 }}
               >
-                <Text style={this.props.headerBackButtonTextStyle}>
-                  {this.props.headerApplyButtonText || "Done"}
+                <Text style={this.props.headerRightButtonTextStyle}>
+                  {this.props.iosHeaderRightIcon || "Done"}
                 </Text>
               </Button>) : null}
           </Right>
