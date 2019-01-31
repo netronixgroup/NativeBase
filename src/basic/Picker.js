@@ -135,8 +135,8 @@ class PickerNB extends Component {
         onPress={onPress}
       >
         {this.state.currentLabel
-          ? this.props.renderItemLabel
-            ? this.props.renderItemLabel({ value: this.props.selectedValue, label: currentLabel })
+          ? this.props.renderButtonLabel
+            ? this.props.renderButtonLabel({ value: this.props.selectedValue, label: currentLabel })
             : (
             <Text style={this.props.textStyle} note={this.props.note}>
               {currentLabel}
@@ -291,7 +291,9 @@ PickerNB.Item = createReactClass({
 
 PickerNB.propTypes = {
   ...ViewPropTypes,
-  renderButton: PropTypes.func
+  renderButton: PropTypes.func,
+  renderItemLabel: PropTypes.func,
+  renderButtonLabel: PropTypes.func
 };
 
 const StyledPickerNB = connectStyle(

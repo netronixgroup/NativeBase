@@ -14,6 +14,11 @@ declare module "native-base" {
 			padder?: boolean;
 		}
 
+		interface Item {
+			label: string;
+			value: string;
+		}
+
 		interface Picker extends ReactNative.PickerProperties {
 			mode?: "dialog" | "dropdown";
 			supportedOrientations?: "portrait" | "landscape"
@@ -33,6 +38,9 @@ declare module "native-base" {
 			headerBackButtonTextStyle?: ReactNative.TextStyle;
 			modalStyle?: ReactNative.ViewStyle;
 			renderHeader?: (backAction: any) => React.ReactElement<any>;
+			items?: Item[];
+			renderItemLabel?: (item: Item) => React.ReactElement<any>;
+			renderButtonLabel?: (item: Item) => React.ReactElement<any>;
 		}
 
 		interface H1 extends ReactNative.TextProperties { }
@@ -520,7 +528,7 @@ declare module "native-base" {
 			noShadow?: boolean;
 
 			// Adding ListView properties
-			// dataSource?: ReactNative.ListViewDataSource; 
+			// dataSource?: ReactNative.ListViewDataSource;
 			enableEmptySections?: boolean;
 			initialListSize?: number;
 			onChangeVisibleRows?: (
